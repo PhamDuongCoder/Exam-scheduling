@@ -1,0 +1,12 @@
+# ninja log v6
+1312	1602	8001848087381899	exam_scheduler.exe	19226a6b69bfb918
+8	824	8001848074385128	CMakeFiles/exam_scheduler.dir/src/main.cpp.obj	1533ee5c556740c4
+70	2751	8001847641036090	CMakeFiles/exam_scheduler.dir/src/greedy_solver.cpp.obj	6eb350c434e945b
+20	1308	8001848074464393	CMakeFiles/exam_scheduler.dir/src/sa_solver.cpp.obj	d3b4b83a1e439bcb
+58	2576	8001847640921467	CMakeFiles/exam_scheduler.dir/src/problem.cpp.obj	1c05ca11058946e8
+85	1304	8001919290049517	build.ninja	67cf3ff7977654e
+104	5504	8001919292352197	CMakeFiles/exam_scheduler.dir/src/problem.cpp.obj	1c05ca11058946e8
+75	5528	8001919291986115	CMakeFiles/exam_scheduler.dir/src/main.cpp.obj	1533ee5c556740c4
+151	5585	8001919292746581	CMakeFiles/exam_scheduler.dir/src/greedy_solver.cpp.obj	6eb350c434e945b
+181	7338	8001919292923369	CMakeFiles/exam_scheduler.dir/src/sa_solver.cpp.obj	d3b4b83a1e439bcb
+7360	8152	8001919364752519	exam_scheduler.exe	19226a6b69bfb918

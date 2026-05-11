@@ -1,0 +1,3 @@
+C:/Users/LENOVO/Documents/GitHub/Exam scheduling/build/CMakeFiles/exam_scheduler.dir
+C:/Users/LENOVO/Documents/GitHub/Exam scheduling/build/CMakeFiles/edit_cache.dir
+C:/Users/LENOVO/Documents/GitHub/Exam scheduling/build/CMakeFiles/rebuild_cache.dir
