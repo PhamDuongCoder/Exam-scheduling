@@ -2,7 +2,7 @@
 #include <algorithm>
 
 void Problem::readInput() {
-    std::cin >> N;
+    std::cin >> N >> M;
 
     // Input classes' info
     d = std::vector<int>(N + 1);
@@ -11,7 +11,6 @@ void Problem::readInput() {
     }
 
     // Input rooms' info
-    std::cin >> M;
     c = std::vector<int>(M + 1);
     for (int j = 1; j <= M; j++) {
         std::cin >> c[j];

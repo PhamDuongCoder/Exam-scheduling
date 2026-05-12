@@ -7,11 +7,10 @@ Objective: Compute the exam time-table such that the number of days used is mini
 
 A solution is represented by 2 array s and r in which s[i] is the start slot and r[i] is the room of course i (NOTE: slots of different days are indexed as consecutive numbers 1, 2, 3, 4, 5, 6, 7, 8, ...)
 Input
-Line 1: contains N
-Line 2: contains d1, d2, …, dN
-Line 3: contains M
-Line 4: contains c1, c2, …, cM
-Line 5: contains K
-Line 5 + k (k = 1,…, K): contains 2 integers i and j (2 courses having a same student registerd,  these courses cannot be scheduled in the same slot)
+Line 1: contains N and M
+Line 2: contains d1, d2, …, dN (number of students in each class)
+Line 3: contains c1, c2, …, cM (capacity of each room)
+Line 4: contains K (number of conflict pairs)
+Line 4 + k (k = 1,…, K): contains 2 integers i and j (2 classes having a same student registered, these classes cannot be scheduled in the same slot)
 Output
 Each line i ( i = 1, 2, . . ., N): contains 3 integer i, s[i], and r[i] */

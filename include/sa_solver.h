@@ -17,6 +17,8 @@ public:
         int maxIterations = 50000;
         int horizonExtension = 4;  // Extend search horizon by this many slots
         int logInterval = 1000;    // Log convergence every N iterations (0 = no logging)
+        double highSlotBias = 0.7;  // Probability to pick from high-slot classes
+        double swapProbability = 0.5; // Probability to do SWAP vs RELOCATE
     };
     
     explicit SASolver(const Params& params) : params_(params) {}

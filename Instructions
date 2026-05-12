@@ -1,0 +1,10 @@
+build project
+
+cd "c:\Users\LENOVO\Documents\GitHub\Exam scheduling\build"
+cmake --build
+
+run SA with logging
+
+Get-Content test_cases\Input\TC_02 | .\build\exam_scheduler.exe sa --log log\TC_02.csv
+python tools\plot_convergence.py log\TC_02.csv
+

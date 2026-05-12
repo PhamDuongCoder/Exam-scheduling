@@ -86,7 +86,39 @@ Or simply:
 Get-Content test_cases\Input\TC_01 | .\build\exam_scheduler.exe
 ```
 
-## Adding New Solvers
+## Input/Output Format
+
+### Input Format
+
+```
+Line 1: N M
+Line 2: d1 d2 ... dN
+Line 3: c1 c2 ... cM
+Line 4: K
+Line 5 to 4+K: i j (conflict pairs)
+```
+
+**Description:**
+- **N**: Number of classes (1-indexed)
+- **M**: Number of rooms (1-indexed)
+- **d[i]**: Number of students in class i (i = 1 to N)
+- **c[j]**: Capacity of room j (j = 1 to M)
+- **K**: Number of conflict pairs
+- **Conflict pairs**: Classes that have common students (cannot be in same time slot)
+
+### Output Format
+
+```
+1 s[1] r[1]
+2 s[2] r[2]
+...
+N s[N] r[N]
+```
+
+Each line i contains:
+- Class ID (1-indexed)
+- Time slot s[i] (1-indexed, consecutive across days)
+- Room r[i] (1-indexed)
 
 To add a new solver (e.g., Genetic Algorithm):
 
@@ -158,10 +190,95 @@ This will:
 2. Automatically generate and save a convergence plot
 3. Display convergence statistics
 
-### Customizing Logging
+## Test Results
 
-Modify `SASolver::Params` in `include/sa_solver.h`:
-- `logInterval`: Log every N iterations (default: 1000, set to 0 to disable)
-- `maxIterations`: Total iterations (default: 1,000,000)
-- `initialTemp`, `coolingRate`, `minTemp`: SA hyperparameters
+All test cases were run with SA solver (50,000 iterations, logging every 1,000 iterations):
+
+| Test Case | Classes | Rooms | Conflicts | Initial Days | Final Days | Improvement | Time |
+|-----------|---------|-------|-----------|--------------|-----------|-------------|------|
+| TC_01     | 1000    | 20    | 247,432   | 31           | 31        | 0          | 26.7s |
+| TC_02     | 500     | 20    | 12,500    | 19           | 19        | 0          | 9.1s  |
+| TC_03     | 200     | 20    | 2,000     | 30           | 30        | 0          | 30.3s |
+| TC_04     | 20      | 20    | 0         | 2            | 1         | ✅ 1       | 226ms |
+| TC_05     | 30      | 20    | 12        | 3            | 3         | 0          | 591ms |
+
+**Summary:**
+- ✅ **TC_04**: Successfully improved from 2 → 1 days (50% reduction)
+- **TC_01, TC_02, TC_03, TC_05**: Already near-optimal solutions from greedy initialization
+
+**Convergence Plots:** Generated for all test cases in `log/TC_*.png`
+
+## Hyperparameter Tuning
+
+The SA solver has several tunable hyperparameters. Use the automated tuning system to find optimal values for your test cases.
+
+### Baseline Configuration
+
+Default hyperparameters (in `tools/tune_hyperparams.py`):
+- **initialTemp**: 100.0 (starting temperature)
+- **minTemp**: 0.01 (stopping temperature)
+- **coolingRate**: 0.9999 (temperature decay per iteration)
+- **maxIterations**: 50000 (iteration limit)
+- **horizonExtension**: 4 (search window size in slots)
+- **swapProbability**: 0.3 (probability of SWAP move vs RELOCATE)
+- **highSlotBias**: 0.5 (bias toward classes in higher time slots)
+
+### Running Tuning
+
+Run the tuning script to sweep hyperparameters:
+
+```powershell
+# Sweep coolingRate with 5 runs per value (default)
+python tools/tune_hyperparams.py --testcase test_cases/Input/TC_02 --sweep coolingRate
+
+# Sweep multiple hyperparameters
+python tools/tune_hyperparams.py --testcase test_cases/Input/TC_02 --sweep coolingRate initialTemp
+
+# Sweep all hyperparameters with 3 runs each (faster testing)
+python tools/tune_hyperparams.py --testcase test_cases/Input/TC_02 --tests 3
+
+# Custom executable and output path
+python tools/tune_hyperparams.py --testcase test_cases/Input/TC_02 --exe build/exam_scheduler.exe --output log/tuning.csv
+```
+
+**Options:**
+- `--testcase <path>`: Input test case file (required)
+- `--sweep <params>`: Which hyperparameters to sweep (default: all)
+  - Available: `coolingRate`, `initialTemp`, `swapProbability`, `highSlotBias`, `horizonExtension`
+- `--tests <count>`: Number of runs per hyperparameter (default: 5)
+- `--exe <path>`: Path to exam_scheduler executable (default: `build/exam_scheduler.exe`)
+- `--output <path>`: Output CSV file (default: `log/tuning_results.csv`)
+
+### Plotting Tuning Results
+
+After tuning completes, generate plots showing hyperparameter sensitivity:
+
+```powershell
+python tools/plot_tuning.py log/tuning_results.csv
+```
+
+This creates `log/tuning_results.png` with subplots for each hyperparameter, showing:
+- X-axis: Hyperparameter value
+- Y-axis: Best days (mean ± standard deviation)
+- Sensitivity analysis across parameter ranges
+
+### Using Optimized Hyperparameters
+
+Once you identify good hyperparameters, pass them via CLI:
+
+```powershell
+Get-Content test_cases/Input/TC_02 | .\build\exam_scheduler.exe sa --coolingRate 0.9995 --initialTemp 50 --swapProbability 0.5
+```
+
+**Example CLI Arguments:**
+```powershell
+.\build\exam_scheduler.exe sa `
+  --initialTemp 100 `
+  --minTemp 0.01 `
+  --coolingRate 0.9999 `
+  --maxIterations 50000 `
+  --horizonExtension 4 `
+  --swapProbability 0.3 `
+  --highSlotBias 0.5
+```
 
