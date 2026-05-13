@@ -8,3 +8,14 @@ run SA with logging
 Get-Content test_cases\Input\TC_02 | .\build\exam_scheduler.exe sa --log log\TC_02.csv
 python tools\plot_convergence.py log\TC_02.csv
 
+# Quick test: tune coolingRate with 3 runs each
+python tools/tune_hyperparams.py --testcase test_cases/Input/TC_02 --tests 3 --sweep coolingRate
+
+# Sweep multiple parameters
+python tools/tune_hyperparams.py --testcase test_cases/Input/TC_02 --sweep initialTemp swapProbability
+
+# Plot results
+python tools/plot_tuning.py log/tuning_results.csv
+
+# Use optimized hyperparameters
+Get-Content test_cases/Input/TC_02 | .\build\exam_scheduler.exe sa --coolingRate 0.9995 --initialTemp 50
